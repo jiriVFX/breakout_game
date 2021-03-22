@@ -33,7 +33,7 @@ paddle = Paddle("static/img/paddle.png")
 
 # Create ball
 #ball = Ball(20, white)
-ball = Ball("static/img/ball2.png")
+ball = Ball("static/img/ball.png")
 
 # Create wall
 wall = pygame.sprite.Group()
