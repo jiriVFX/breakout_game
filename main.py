@@ -5,8 +5,6 @@ from brick import Brick
 from ball import Ball
 import time
 
-# from pygame.locals import (K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE, KEYDOWN, QUIT)
-
 # Initialize pygame
 pygame.init()
 
@@ -23,7 +21,6 @@ pygame.font.init()
 font = pygame.font.SysFont("Consolas", 60, bold=True)
 text_won = font.render("You won!", True, white)
 text_won_corner = text_won.get_rect(center=((GAME_WIDTH) / 2, GAME_HEIGHT / 2 - 40))
-#pygame.draw.rect(text_surface_won, yellow, rect, 1)
 
 # Gaming area surface
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
@@ -31,12 +28,12 @@ game_surface.fill(dark_grey)
 # rect = game_space.get_rect()
 
 # Create paddle
-paddle = Paddle(PADDLE_WIDTH, PADDLE_HEIGHT, red)
-# Create ball
-# ball = Ball(, blue)
+# paddle = Paddle(PADDLE_WIDTH, PADDLE_HEIGHT, red)
+paddle = Paddle("static/img/paddle.png")
 
 # Create ball
-ball = Ball(20, white)
+#ball = Ball(20, white)
+ball = Ball("static/img/ball2.png")
 
 # Create wall
 wall = pygame.sprite.Group()
@@ -75,7 +72,8 @@ while game_on:
             if event.key == pygame.K_ESCAPE:
                 game_on = False
             else:
-                print(pygame.key.name(event.key))
+                pass
+                #print(pygame.key.name(event.key))
 
     # Ball collision detection and movement ----------------------------------------------------------------------------
 
@@ -102,10 +100,9 @@ while game_on:
     # Place the paddle on the screen
     # Places paddle in the middle + paddle corner(rect) position (changes when paddle moves)
     screen.blit(paddle.surface, paddle.corner)
+
     # Place the ball on the screen
     screen.blit(ball.surface, ball.corner)
-    # print(paddle.corner)
-    # screen.blit(paddle.surface, ((GAME_WIDTH - PADDLE_WIDTH) / 2, GAME_HEIGHT - 40))
 
     # Check whether there are any bricks left
     # Render End Game text - has to be the last to render, otherwise covered by other surfaces

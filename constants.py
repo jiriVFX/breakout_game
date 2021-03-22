@@ -7,7 +7,7 @@ red = (180, 0, 0)
 white = (230, 230, 230)
 yellow = (255, 210, 0)
 # Screen
-SCREEN_WIDTH = 820
+SCREEN_WIDTH = 920
 SCREEN_HEIGHT = 600
 # Game area
 GAME_WIDTH = SCREEN_WIDTH - 10
