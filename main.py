@@ -126,4 +126,6 @@ while game_on:
     clock.tick(60)
     # print(clock.get_fps())
 
+# Quit all the sounds and the game
+pygame.mixer.quit()
 pygame.quit()

@@ -9,7 +9,8 @@ class Ball(pygame.sprite.Sprite):
     CORNER_THRESHOLD = 20
     # Initialize the sound module
     pygame.mixer.init()
-    collision_sound = pygame.mixer.Sound("static/sound/bat_hit.mp3")
+    col_sound = pygame.mixer.Sound("static/sound/hit1.mp3")
+    col_sound_2 = pygame.mixer.Sound("static/sound/hit2.mp3")
 
     def __init__(self, ball_path, ball_radius=20, ball_color=white):
         super().__init__()
@@ -33,7 +34,10 @@ class Ball(pygame.sprite.Sprite):
         self.corner.move_ip(self.direction_x * self.speed, self.direction_y * self.speed)
 
     def bounce_sound(self):
-        self.collision_sound.play()
+        self.col_sound.play()
+
+    def bounce_sound_2(self):
+        self.col_sound_2.play()
 
     def bounce(self):
         self.direction_y *= -1
@@ -58,7 +62,7 @@ class Ball(pygame.sprite.Sprite):
             self.bounce_count += 1
             # Play sound
             self.bounce_sound()
-        elif self.corner.left < 5 or self.corner.right > GAME_WIDTH:
+        elif self.corner.left < 5 or self.corner.right > SCREEN_WIDTH - 5:
             self.direction_x *= - 1
             self.bounce_count += 1
             # Play sound
@@ -118,4 +122,4 @@ class Ball(pygame.sprite.Sprite):
                     print("Hit right corner")
             print(f"Ball speed: {self.speed}")
             # Play sound
-            self.bounce_sound()
+            self.bounce_sound_2()
