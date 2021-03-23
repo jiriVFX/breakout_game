@@ -60,7 +60,7 @@ for i in range(5):
         # x = (j * size of the brick + half the size of the brick + offset from the left)
         # y = i * (height of the brick + space between lines) + offset from the top
         # print(colour)
-        wall.add(Brick((j * GAME_WIDTH / 10 + GAME_WIDTH / 10 / 2 + 5), i * (GAME_HEIGHT / 30 + 5) + 60, colour))
+        wall.add(Brick((j * GAME_WIDTH / 10 + GAME_WIDTH / 10 / 2 + 5), i * (GAME_HEIGHT / 30 + 5) + 80, colour))
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Game loop
