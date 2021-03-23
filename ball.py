@@ -7,6 +7,9 @@ class Ball(pygame.sprite.Sprite):
     # Paddle collision threshold determines whether the centre or corners of paddle were hit
     MID_THRESHOLD = 50
     CORNER_THRESHOLD = 20
+    # Initialize the sound module
+    pygame.mixer.init()
+    collision_sound = pygame.mixer.Sound("static/sound/bat_hit.mp3")
 
     def __init__(self, ball_path, ball_radius=20, ball_color=white):
         super().__init__()
@@ -29,6 +32,9 @@ class Ball(pygame.sprite.Sprite):
     def move(self):
         self.corner.move_ip(self.direction_x * self.speed, self.direction_y * self.speed)
 
+    def bounce_sound(self):
+        self.collision_sound.play()
+
     def bounce(self):
         self.direction_y *= -1
         if self.bounce_count < 10:
@@ -36,6 +42,8 @@ class Ball(pygame.sprite.Sprite):
         else:
             self.speed += 0.5
             self.bounce_count = 0
+        # Play sound
+        self.bounce_sound()
 
     def reset(self):
         self.corner = self.surface.get_rect(center=(GAME_WIDTH / 2, GAME_HEIGHT - 55))
@@ -48,14 +56,20 @@ class Ball(pygame.sprite.Sprite):
         if self.corner.top < 5:
             self.direction_y *= - 1
             self.bounce_count += 1
+            # Play sound
+            self.bounce_sound()
         elif self.corner.left < 5 or self.corner.right > GAME_WIDTH:
             self.direction_x *= - 1
             self.bounce_count += 1
+            # Play sound
+            self.bounce_sound()
         # If the ball gets beyond game field on the bottom
         elif self.corner.bottom > GAME_HEIGHT:
             print("You loose life")
             time.sleep(0.5)
             self.reset()
+            # Play sound
+            self.bounce_sound()
 
     def collision_detect(self, wall_group, paddle):
         # Handle border sides collisions
@@ -103,3 +117,5 @@ class Ball(pygame.sprite.Sprite):
                         self.direction_x *= -1
                     print("Hit right corner")
             print(f"Ball speed: {self.speed}")
+            # Play sound
+            self.bounce_sound()

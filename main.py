@@ -22,6 +22,10 @@ font = pygame.font.SysFont("Consolas", 60, bold=True)
 text_won = font.render("You won!", True, white)
 text_won_corner = text_won.get_rect(center=((GAME_WIDTH) / 2, GAME_HEIGHT / 2 - 40))
 
+# Sounds
+collision_sound = pygame.mixer.Sound("static/sound/bat_hit.mp3")
+winning_sound = pygame.mixer.Sound("static/sound/chime.mp3")
+
 # Gaming area surface
 game_surface = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 game_surface.fill(dark_grey)
@@ -107,10 +111,12 @@ while game_on:
     # Check whether there are any bricks left
     # Render End Game text - has to be the last to render, otherwise covered by other surfaces
     if not wall:
+        # Play winning sound
+        winning_sound.play()
         screen.blit(text_won, text_won_corner)
         pygame.display.update()
         # Wait for x miliseconds until closing the game
-        pygame.time.delay(2000)
+        pygame.time.delay(3000)
         game_on = False
 
     # Refresh display
