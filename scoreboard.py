@@ -18,5 +18,8 @@ class Scoreboard(pygame.sprite.Sprite):
         self.update_score()
 
     def decrease(self):
-        self.score -= 5
+        if self.score >= 5:
+            self.score -= 5
+        else:
+            self.score = 0
         self.update_score()

@@ -75,7 +75,7 @@ class Ball(pygame.sprite.Sprite):
             self.bounce_sound()
         # If the ball gets beyond game field on the bottom
         elif self.corner.bottom > GAME_HEIGHT:
-            print("Balll lost")
+            print("Ball lost")
             time.sleep(0.5)
             self.reset()
             # Decrease score
@@ -84,11 +84,23 @@ class Ball(pygame.sprite.Sprite):
     def wall_collision(self, wall_group, scoreboard):
         for brick in wall_group:
             if self.corner.colliderect(brick.corner):
-                if abs(self.corner.bottom - brick.corner.top) < 3 or abs(self.corner.top - brick.corner.bottom) < 3:
+                # The difference between y position of ball and brick is usually < 3 px
+                if abs(self.corner.midbottom[1] - brick.corner.midtop[1]) < 3 or abs(self.corner.midtop[1] - brick.corner.midbottom[1]) < 3:
+                    print(f"Ball bottom: {self.corner.midbottom[1]}")
+                    print(f"Brick top: {brick.corner.midtop[1]}")
+                    print(f"Ball top: {self.corner.midtop[1]}")
+                    print(f"Brick bottom: {brick.corner.midbottom[1]}")
+                    print(f"Direction: {self.direction_y}")
+                    print("--------------------------------------------------")
                     brick.kill()
                     self.wall_bounce()
                     # Increase score
                     scoreboard.increase()
+                    # BREAK is necessary to stop two bricks being destroyed at one impact
+                    # - otherwise ball continues in the original direction and destroys 3 bricks
+                    # - because y position reverses twice when hitting two bricks at the same time
+                    # - changes in y negate and ball continues in the original direction
+                    break
                 # Side was hit
                 else:
                     # Condition against stuck in the wall bug
@@ -100,6 +112,7 @@ class Ball(pygame.sprite.Sprite):
                         self.bounce_sound()
                         # Increase score
                         scoreboard.increase()
+                        break
 
     def paddle_collision(self, paddle):
         if self.corner.colliderect(paddle.corner):
