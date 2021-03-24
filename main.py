@@ -3,6 +3,7 @@ from constants import *
 from paddle import Paddle
 from brick import Brick
 from ball import Ball
+from scoreboard import Scoreboard
 import time
 
 # Initialize pygame
@@ -15,6 +16,9 @@ screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 pygame.display.set_caption("Breakout game")
 # Set background colour
 screen.fill(white)
+
+# Scoreboard
+scoreboard = Scoreboard()
 
 # Font
 pygame.font.init()
@@ -60,7 +64,7 @@ for i in range(5):
         # x = (j * size of the brick + half the size of the brick + offset from the left)
         # y = i * (height of the brick + space between lines) + offset from the top
         # print(colour)
-        wall.add(Brick((j * GAME_WIDTH / 10 + GAME_WIDTH / 10 / 2 + 5), i * (GAME_HEIGHT / 30 + 5) + 80, colour))
+        wall.add(Brick((j * GAME_WIDTH / 10 + GAME_WIDTH / 10 / 2 + 5), i * (GAME_HEIGHT / 20 + 5) + 80, colour))
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Game loop
@@ -75,16 +79,13 @@ while game_on:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 game_on = False
-            else:
-                pass
-                #print(pygame.key.name(event.key))
 
     # Ball collision detection and movement ----------------------------------------------------------------------------
 
     ball.move()
 
     # Collision detection and bouncing
-    ball.collision_detect(wall, paddle)
+    ball.collision_detect(wall, paddle, scoreboard)
 
     # Pressed down keys boolean list - 0 for keys not pressed and 1 for keys pressed
     pressed_keys = pygame.key.get_pressed()
@@ -107,6 +108,9 @@ while game_on:
 
     # Place the ball on the screen
     screen.blit(ball.surface, ball.corner)
+
+    # Place scoreboard on the screen
+    screen.blit(scoreboard.score_text, scoreboard.corner)
 
     # Check whether there are any bricks left
     # Render End Game text - has to be the last to render, otherwise covered by other surfaces

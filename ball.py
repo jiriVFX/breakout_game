@@ -61,7 +61,7 @@ class Ball(pygame.sprite.Sprite):
         self.speed = MIN_SPEED
         self.bounce_count = 0
 
-    def border_collision(self):
+    def border_collision(self, scoreboard):
         # Bounce ball of the walls
         if self.corner.top < 5:
             self.direction_y *= - 1
@@ -75,17 +75,35 @@ class Ball(pygame.sprite.Sprite):
             self.bounce_sound()
         # If the ball gets beyond game field on the bottom
         elif self.corner.bottom > GAME_HEIGHT:
-            print("You loose life")
+            print("Balll lost")
             time.sleep(0.5)
             self.reset()
-            # Play sound
-            self.bounce_sound()
+            # Decrease score
+            scoreboard.decrease()
 
-    def wall_collision(self, wall_group):
+    def wall_collision(self, wall_group, scoreboard):
         for brick in wall_group:
             if self.corner.colliderect(brick.corner):
-                brick.kill()
-                self.wall_bounce()
+                # If the brick was hit from top or bottom
+                # print(f"Ball top: {self.corner.top}")
+                # print(f"Ball bottom: {self.corner.bottom}")
+                # print(f"Brick top: {brick.corner.top}")
+                # print(f"Brick bottom: {brick.corner.bottom}")
+                if abs(self.corner.bottom - brick.corner.top) < 3 or abs(self.corner.top - brick.corner.bottom) < 3:
+                    brick.kill()
+                    self.wall_bounce()
+                    # Increase score
+                    scoreboard.increase()
+                # Side was hit
+                else:
+                    if self.corner.left > 5 and self.corner.right < GAME_WIDTH:
+                        brick.kill()
+                        self.direction_x *= -1
+                        self.speed_increase()
+                        # Play sound
+                        self.bounce_sound()
+                        # Increase score
+                        scoreboard.increase()
 
     def paddle_collision(self, paddle):
         if self.corner.colliderect(paddle.corner):
@@ -102,7 +120,7 @@ class Ball(pygame.sprite.Sprite):
                 # If paddle and ball are moving opposite directions
                 elif (self.direction_x > 0 > paddle.direction) or (self.direction_x < 0 < paddle.direction):
                     if self.speed > 2:
-                        self.speed -= SPEED_INCREMENT
+                        self.speed += SPEED_INCREMENT
                         print(f"Paddle direction: {paddle.direction}")
                         print(f"Ball direction_x: {self.direction_x}")
                 # Play sound
@@ -129,10 +147,10 @@ class Ball(pygame.sprite.Sprite):
             print(f"{self.corner.midbottom[1]} vs {paddle.corner.midtop[1]}")
             print(f"Ball speed: {self.speed}")
 
-    def collision_detect(self, wall_group, paddle):
+    def collision_detect(self, wall_group, paddle, scoreboard):
         # Handle border sides collisions
-        self.border_collision()
+        self.border_collision(scoreboard)
         # Wall collision detection
-        self.wall_collision(wall_group)
+        self.wall_collision(wall_group, scoreboard)
         # Paddle collision detection
         self.paddle_collision(paddle)

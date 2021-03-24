@@ -21,13 +21,12 @@ class Paddle(pygame.sprite.Sprite):
 
     def move(self, pressed_keys):
         self.direction = 0
-        if pressed_keys[pygame.K_LEFT]:
+        if pressed_keys[pygame.K_LEFT] or pressed_keys[pygame.K_a]:
             self.corner.move_ip(-self.speed, 0)
             self.direction = - 1
-        if pressed_keys[pygame.K_RIGHT]:
+        if pressed_keys[pygame.K_RIGHT] or pressed_keys[pygame.K_d]:
             self.corner.move_ip(self.speed, 0)
             self.direction = 1
-        #print(self.corner)
 
         if self.corner.left < 5:
             self.corner.left = 5
