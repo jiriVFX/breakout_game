@@ -84,11 +84,6 @@ class Ball(pygame.sprite.Sprite):
     def wall_collision(self, wall_group, scoreboard):
         for brick in wall_group:
             if self.corner.colliderect(brick.corner):
-                # If the brick was hit from top or bottom
-                # print(f"Ball top: {self.corner.top}")
-                # print(f"Ball bottom: {self.corner.bottom}")
-                # print(f"Brick top: {brick.corner.top}")
-                # print(f"Brick bottom: {brick.corner.bottom}")
                 if abs(self.corner.bottom - brick.corner.top) < 3 or abs(self.corner.top - brick.corner.bottom) < 3:
                     brick.kill()
                     self.wall_bounce()
@@ -96,6 +91,7 @@ class Ball(pygame.sprite.Sprite):
                     scoreboard.increase()
                 # Side was hit
                 else:
+                    # Condition against stuck in the wall bug
                     if self.corner.left > 5 and self.corner.right < GAME_WIDTH:
                         brick.kill()
                         self.direction_x *= -1
@@ -109,20 +105,20 @@ class Ball(pygame.sprite.Sprite):
         if self.corner.colliderect(paddle.corner):
             # When the ball hits paddle in the middle
             if abs(self.corner.midbottom[0] - paddle.corner.midtop[0]) < self.MID_THRESHOLD and self.direction_y > 0:
-                print("Hit centre")
+                # print("Hit centre")
                 self.direction_y *= - 1
                 # If the paddle is moving the same direction as the ball
                 if (self.direction_x > 0 < paddle.direction) or (self.direction_x < 0 > paddle.direction):
                     if self.speed < MAX_SPEED:
                         self.speed += SPEED_INCREMENT
-                        print(f"Paddle direction: {paddle.direction}")
-                        print(f"Ball direction_x: {self.direction_x}")
+                        # print(f"Paddle direction: {paddle.direction}")
+                        # print(f"Ball direction_x: {self.direction_x}")
                 # If paddle and ball are moving opposite directions
                 elif (self.direction_x > 0 > paddle.direction) or (self.direction_x < 0 < paddle.direction):
                     if self.speed > 2:
                         self.speed += SPEED_INCREMENT
-                        print(f"Paddle direction: {paddle.direction}")
-                        print(f"Ball direction_x: {self.direction_x}")
+                        # print(f"Paddle direction: {paddle.direction}")
+                        # print(f"Ball direction_x: {self.direction_x}")
                 # Play sound
                 self.bounce_sound_2()
             else:
@@ -135,16 +131,15 @@ class Ball(pygame.sprite.Sprite):
                         # If the paddle moves in the opposite direction to ball
                         if self.direction_x > 0 and paddle.direction == -1:
                             self.direction_x *= -1
-                        print("Hit left corner")
+                        # print("Hit left corner")
                     # When the right edge of the paddle was hit
                     elif abs(self.corner.midbottom[0] - paddle.corner.topright[0]) < self.CORNER_THRESHOLD:
                         # If the paddle moves in the opposite direction to ball
                         if self.direction_x < 0 and paddle.direction == 1:
                             self.direction_x *= -1
-                        print("Hit right corner")
+                        # print("Hit right corner")
                     # Play sound
                     self.bounce_sound_2()
-            print(f"{self.corner.midbottom[1]} vs {paddle.corner.midtop[1]}")
             print(f"Ball speed: {self.speed}")
 
     def collision_detect(self, wall_group, paddle, scoreboard):
