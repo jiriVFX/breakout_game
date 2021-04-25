@@ -27,7 +27,7 @@ text_won = font.render("You won!", True, white)
 text_won_corner = text_won.get_rect(center=((GAME_WIDTH) / 2, GAME_HEIGHT / 2 - 40))
 
 # Sounds
-collision_sound = pygame.mixer.Sound("static/sound/bat_hit.mp3")
+collision_sound = pygame.mixer.Sound("static/sound/hit1.mp3")
 winning_sound = pygame.mixer.Sound("static/sound/chime.mp3")
 
 # Gaming area surface
